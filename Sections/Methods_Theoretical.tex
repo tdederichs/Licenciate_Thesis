@@ -1,0 +1,91 @@
+\chapter{Electronic Structure Methods}
+\label{chapter:Electronic_Structure_Methods}
+In the previous chapter, the general concept of MO theory was introduced, which allows the understanding of chemical bonding based on its electronic structure. Until here, the exact energy of these orbitals has been only partially covered. In order to change this, theoretical electronic structure methods are introduced to calculate those energies, which enable us to calculate spectra allowing for comparison with experimental observables. The equations are taken from literature textbooks \cite{szabo1996modern, jensen2017introduction}, which describe their derivation in greater detail.
+
+\section{Hartree-Fock Methods}
+\subsection{The Electronic Hamiltonian}
+\label{sec:Hartree_Fock}
+The basis of calculating the energy of a system is the Schr\"odinger equation (eq. \ref{eq:Schroedinger_equation} introduced in section \ref{sec:MO_theory}, consisting of the Hamiltonian $\hat{H}$ and the wavefunction $\Psi$. Until here, only the general form of the Hamiltonian has been introduced in equation \ref{eq:Hamilton_operator}, which can be further dissected into kinetic and potential energies of the nuclei and electrons:
+\begin{equation}
+    \hat{H} = \hat{T}_{e} + \hat{T}_{N} + \hat{V}_{ee} + \hat{V}_{eN} + \hat{V}_{NN},
+    \label{eq:Hamilton_operator_expaneded}
+\end{equation}
+where $\hat{T}$ and $\hat{V}$ are the operators for kinetic and potential energy for electrons $e$ and nuclei $N$. Thus the terms $ \hat{V}_{eN}, \hat{V}_{ee}$, and $\hat{V}_{NN}$ describe the electron-nuclei attraction, electron-electron repulsion and nuclei-nuclei repulsion, respectively. This Hamiltonian provides a formally exact description, however solving the corresponding Schr\"odinger equation is intractable due to the simultaneous treatment of all particles. A key approximation to circumvent this issue is the Born-Oppenheimer approximation \cite{born_oppenheimer1927}. As nuclei are much heavier than electrons, they move more slowly. Thus it can be assumed that electrons move in a field of fixed nuclei. Within this approximation, the kinetic energy operator for nuclei $\hat{T}_{N}$ can be neglected and the nuclei-nuclei repulsion $\hat{V}_{NN}$ can be considered to be constant. The remaining terms of equation \ref{eq:Hamilton_operator_expaneded} are summarized as the electronic Hamiltonian $\hat{H}_{elec}$ and can be written as the following in its operator form:
+\begin{equation}
+    \hat{H}_{elec} = \underbrace{-\sum_{i = 1}^{A}\frac{1}{2}\nabla^{2}_{i}}_{\hat{T}_{e}}  + \underbrace{\sum_{i=1}^{A}\sum_{j>i}^{A}\frac{1}{r_{ij}}}_{\hat{V}_{ee}}  \underbrace{-\sum_{i=1}^{A}\sum_{N=1}^{B}\frac{Z_{N}}{r_{iN}}}_{\hat{V}_{eN}}.
+    \label{eq:Hamilton_operator_electronic}
+\end{equation}
+Here, $\nabla^{2}$ is the Laplace operator, $r_{ij}$ is the distance between the electrons $i$ and $j$, $r_{ij}$ is the distance between electron $i$ and nucleus $N$ with its atomic number $Z_{N}$. Solving the Schr\"odinger equation for the electronic Hamiltonian, yields the electronic energy as a function of the position of the nuclei $E_{elec}(R)$ (potential energy surface), on which the nuclei move. The total energy $E_{tot}$ can then be calculated by adding the $V_{NN}$ term afterwards, as it has not direct influence on the wavefunction. This assumption directly introduces the adiabatic approximation, which assumes that the nuclear dynamics remain confined to a single electronic state, neglecting couplings to different states. As a consequence no electronic surface transitions are possible.
+
+\subsection{The "Correct" Wavefunction}
+In the previous chapter we have manly focused on the one-electron wavefunctions which give access to molecular orbitals of a system. In this chapter, we will take a step back and reconsider what the correct choice of the wavefunction is to describe systems using the Schr\"odingner equation. The basis for construction of the many-electron wavefunction is the LCAO ansatz introduced in section \ref{sec:MO_theory}, which allows the construction of molecular orbitals on the basis of atomic basis functions. One approach for these atomic basis functions are so-called Slater functions, which are the solutions of the H atom. They are of the type:
+\begin{equation}
+   \phi = Y_{l}^{m}(\theta, \phi) \cdot r^{n-1}\mathrm{exp}\frac{-\zeta\cdot |r|}{n},
+    \label{eq:Slater_function}
+\end{equation}
+where $Y_{l}^{m}(\theta, \phi)$ are the spherical harmonics, $n, l, m$ are the quantum numbers, and $\zeta$ is a constant related to the effective charge of the nucleus. However, their integration is very expensive and numerically problematic. Thus, other easier to integrate functions need to be utilized. For molecules, the solution is to use spherical Gaussian functions of the form:
+\begin{equation}
+   \phi = Y_{l}^{m}(\theta, \phi) \mathrm{exp}(-\zeta\cdot r^2).
+    \label{eq:spherical_Gaussian_function}
+\end{equation}
+In contrast to Slater functions, calculations using Gaussian is computational inexpensive (Gaussian product theorem) and the integrals involving them can be solved analytically. Their main drawback is the wrong description of the short- and long-range behavior (to low intensity close to the nucleus and to low intensity at large distances from the nucleus). The solution to this, are so-called contracted Gaussians type orbitals (CGTOs), which are a linear combination of typical 2 to 10 primitive Gaussians type orbitals (PGTOs):
+\begin{equation}
+   \phi^{\mathrm{CGTO}} = \sum_{i}^{\approx2-10} c_{i}\phi_{i}^{\mathrm{PGTO}}(\zeta_{i})
+    \label{eq:contracted_Gaussians}
+\end{equation}
+Until here, the approaches were only solutions for one-electron wavefunctions. The simplest approximation to approach many-electron systems is the so-called Hartree ansatz, which gives the wavefunction of a many-electron system as a combination of individual one electron functions (also called Hartree product) which is given as:
+\begin{equation}
+   \Psi^{\mathrm{HP}} = \phi_{1}(1)\phi_{2}(2)\cdots \phi_{N}(N),
+    \label{eq:Hartree_product}
+\end{equation}
+for an $N$-electronic systems with each electron in their individual state. In the Hartree product, the electrons are treated as independent particles that interact only through an average or "mean-field" potential generated by the presence of all other electrons. We will return to this issue later in the chapter. Beyond this mean-field approximation, the Hartree product suffers from two additional shortcomings. First, because the electrons are explicitly assigned to specific orbitals, the wavefunction does not satisfy the required antisymmetry condition for fermions (particles with a spin = $n + \frac{1}{2}$). Second, this formulation incorrectly renders the electrons distinguishable, whereas they are fundamentally indistinguishable particles. The indistinguishability and antisymmetry of electrons is implemented by expression of the wavefunction as a Slater determinant:
+\begin{equation}
+\Psi^{\mathrm{SD}} = \frac{1}{\sqrt{N!}}
+\begin{vmatrix}
+\phi_{1}(1) & \phi_{1}(2) &  \cdots & \phi_{1}(N) \\ 
+\phi_{2}(1) & \phi_{2}(2) &  \cdots & \phi_{2}(N) \\
+\vdots &  \vdots & \ddots &\vdots \\
+\phi_{N}(1) & \phi_{N}(2) &  \cdots & \phi_{N}(N)\\ 
+\end{vmatrix}\\
+= \ket{\phi(1)\phi(2)\cdots\phi(N)}
+\end{equation}
+
+\subsection{The Hartree-Fock Procedure}
+\label{sec:The_Hartree-Fock_Procedure}
+With now a valid wavefunction and Hamiltonian, we can now proceeding to calculate the energy of a system. As discussed previously, an exact solution to the Schr\"odinger equation can only be obtained for one-electron systems. For many-electron systems, approximate solutions must be employed. One approach is based on the variational principle, which states that every approximate solution of the wavefunction possesses an energy which always exceeds the exact energy $E_{0}$. This approximate energy can be optimized by iteratively trying to minimize the energy by optimizing the orbitals (one-electron wavefunctions) which are used to construct the many-electron wavefunction. In order to do so, we need to transform the Schr\"odinger equation into a matrix eigenvalue problem, which can iteratively be solved in computer algorithms. \\
+The first step is the dissection of the electron Hamiltonian (see eq. \ref{eq:Hamilton_operator_electronic}) into one-electron $\mathcal{O}_{1}$ ($\hat{T}_{e}$ and $\hat{V}_{eN}$) and two-electron $\mathcal{O}_{2}$ ($\hat{V}_{ee}$) operators. For the one-electron operators, integration is performed only over the orbitals associated with the $i$-th electron, while contributions from all other orbitals vanish due to their integrals resulting to unity. The two one-electron operators are often combined into a single operator, denoted as $h$. The two-electron operator can be further decomposed into the Coulomb integral $J_{ij}$, which describes the classical Coulomb repulsion between two electrons $i$ and $j$, and the exchange integral $K_{ij}$, which has no classical analogue. The exchange integral arises purely from quantum mechanics, as a consequence of the indistinguishability of fermions and the antisymmetry requirement of the wavefunction. This phenomenon can be understood as follows: Each electron creates an exchange hole in its vicinity, a region from which other electrons of the same spin are excluded. This behavior is a manifestation of the Pauli-Principle. A detailed derivation of these terms can be found here \cite{jensen2017introduction}. Using these new integrals the energy of a Slater determinant can be written as:
+\begin{equation}
+    E_{elec} = \sum_{i}^{A}h_{i} \sum_{i<j}^{A, A} J_{ij} - K_{ij}
+    \label{eq:Energy_Slater}
+\end{equation}
+According to this equation, each electron contributes an attraction to the nuclei and possesses a certain kinetic energy, both described by the one-electron operator $h$. Furthermore, each unique pair of electrons contributes a Coulomb repulsion term $J$, which is subsequently corrected by the exchange interaction $K$ for pairs of electrons with the same spin. For the purpose of deriving at an expression to be used in the variational principle, it is convenient to transform the energy expression in \ref{eq:Energy_Slater} in terms of its operator form, which is called the Fock operator:
+\begin{equation}
+    f(1) = h(1) + \sum_{i}^{A}\mathcal{J}_{i}(1)-\mathcal{K}_{i}(1).
+    \label{eq:fock_operator}
+\end{equation}
+This new one-electron operator obtains a set of $A$ (number of electrons) interdependent eigenvalue problems: 
+\begin{equation}
+    \left\{
+    f(i)\psi_{i}(i) = \epsilon_{i} \cdot \psi_{i}(i) \right\}.
+    \label{eq:Fock_eignevalues}
+\end{equation}
+Using the definition of the molecular orbitals via the LCAO ansatz (see equation \ref{eq:LCAO_ansatz}) and inserting it into equation \ref{eq:Fock_eignevalues} we yield:
+\begin{equation}
+    f(i)\sum_{a}^{M_{basis}}c_{ai}\phi_{a} = \epsilon_{i}\sum_{a}^{M_{basis}}c_{ai}\phi_{a},
+    \label{eq:Fock_eignevalues_plugged_in}
+\end{equation}
+where $M_{basis}$ is the amount of atom centered basis functions. Multiplying from the left by a specific basis function and integrating yields the Roothaan-Hall equations \cite{RevModPhys.23.69}. These are the Hartee-Fock equations in the atomic orbital basis. They can be collected for all $M_{basis}$ equations in a matrix notation:
+\begin{equation}
+    \textbf{FC} = \textbf{SC}\epsilon, 
+    \label{eq:Hartree_fock_equation_matrix}
+\end{equation}
+with 
+\begin{equation}
+    \textbf{F}_{\mu\nu} = \braket{\phi_{\mu}|f(1)|\phi_{\nu}} \qquad \mathrm{and} \qquad \textbf{S}_{\mu\nu} = \braket{\phi_{\mu}|\phi_{\nu}}
+    \label{eq:Fock_matrix}
+\end{equation}
+\subsection{Post Hartree-Fock Methods}
+\label{sec:Post_Hartree-Fock_Methods}
+
+\section{Density Functional Theory}
+\label{sec:DFT}
